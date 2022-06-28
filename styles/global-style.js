@@ -30,16 +30,16 @@ const GlobalStyle = createGlobalStyle`
 
   h2,
   h3,
-  h4 { 
-    margin-bottom: 36px; 
+  h4 {
+    margin-bottom: 36px;
   }
 
   p {
     line-height: 1.75;
-    
+
     & + p {
       margin-top: 2rem;
-    } 
+    }
   }
 
   img { max-width: 100%; }
@@ -61,6 +61,15 @@ const GlobalStyle = createGlobalStyle`
     &::-moz-focus-inner { border: 0; }
 
     &:not(:disabled) { cursor: pointer; }
+  }
+
+  .transitioning {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-color: #333;
+    perspective: 1800px
   }
 `;
 

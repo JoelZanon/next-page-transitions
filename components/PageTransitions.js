@@ -1,60 +1,103 @@
-import styled from 'styled-components';
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
+const transitionZoom = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(.6);
+  }
+  70% {
+    transform: scale(.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const transitionOutFlip = keyframes`
+  from {
+    transform: rotateY(0) translateZ(-1px);
+    z-index: 4;
+  }
+  to {
+    transform: rotateY(180deg) translateZ(-1px);
+    z-index: 0;
+  }
+`;
+
+const transitionInFlip = keyframes`
+  from {
+    transform: rotateY(-180deg) translateZ(1px);
+  }
+  to {
+    transform: rotateY(0) translateZ(1px);
+    z-index: 4;
+  }
+`;
+
 const MainComponent = styled.div`
+  transform-style: preserve-3d;
   &.page-enter-active {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    opacity: 0;
+    animation: 500ms ${transitionInFlip} 250ms cubic-bezier(0.37, 0, 0.63, 1) both;
+    backface-visibility: hidden;
   }
-  &.page-exit {
-    ~ .wipe {
-      transform: translateY(100%);
+  &.page-enter-active,
+  &.page-exit-active {
+    .page-transition-inner {
+      height: 100vh;
+      overflow: hidden;
+      animation: 1000ms ${transitionZoom} cubic-bezier(0.45, 0, 0.55, 1) both;
+      background: white;
     }
   }
   &.page-exit-active {
-    ~ .wipe {
-      transform: translateY(0);
-      transition: transform 1000ms ease;
-    }
-
     main {
       transform: translateY(-${props=>props.routingPageOffset}px);
     }
-  }
-  &.page-enter-done {
-    ~ .wipe {
-      transform: translateY(-100%);
-      transition: transform 1000ms ease;
-    }
+    animation: 500ms ${transitionOutFlip} 250ms cubic-bezier(.37, 0, .63, 1) both;
+    backface-visibility: hidden;
   }
 `;
 
-const Wipe = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: #aaa;
-  z-index: 5;
-  transform: translateY(100%);
+const SecondaryComponent = styled.div`
+  position: relative;
 `;
 
 const PageTransitions = ({ children, route, routingPageOffset }) => {
+  const [transitioning, setTransitioning] = useState();
+
+  const playTransition = () => {
+    console.log('trans');
+    setTransitioning(true);
+  };
+  const stopTransition = () => {
+    setTransitioning();
+  };
+
   return (
     <>
-      <TransitionGroup component={null}>
-        <CSSTransition key={route} classNames="page" timeout={1000}>
+      <TransitionGroup className={transitioning ? 'transitioning' : ''}>
+        <CSSTransition
+            key={route}
+            classNames="page"
+            timeout={1000}
+            onEnter={playTransition}
+            onExited={stopTransition}
+          >
           <MainComponent routingPageOffset={routingPageOffset}>
-            {children}
+            <SecondaryComponent className="page-transition-inner">
+              {children}
+            </SecondaryComponent>
           </MainComponent>
         </CSSTransition>
       </TransitionGroup>
-      <Wipe className="wipe" />
     </>
   )
 };
