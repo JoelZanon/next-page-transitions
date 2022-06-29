@@ -4,6 +4,8 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { useRouter } from 'next/router';
 import gsap from 'gsap';
 
+const pageTransitionDuration = 500;
+
 const transitionZoom = keyframes`
   0% {
     transform: scale(1);
@@ -165,14 +167,14 @@ const PageTransitions = ({ children, route, routingPageOffset }) => {
     setTransitioning();
     let xPos = currentPageNavigationIndex > newPageNavigationIndex ? 100 : -100;
     gsap.timeline({})
-    .to(element, { xPercent: xPos });
+    .to(element, { xPercent: xPos, duration: pageTransitionDuration / 1000 });
   };
   const onEnterStart = (element) => {
     setTransitioning(true);
     newPageNavigationIndex = parseInt(element['id'], 10);
     let xPos = currentPageNavigationIndex > newPageNavigationIndex ? -100 : 100;
     gsap.timeline({})
-    .from(element, { xPercent: xPos });
+    .from(element, { xPercent: xPos, duration: pageTransitionDuration / 1000 });
   };
 
   useEffect(() => {
@@ -192,7 +194,7 @@ const PageTransitions = ({ children, route, routingPageOffset }) => {
         <CSSTransition
             key={route}
             classNames="page"
-            timeout={500}
+            timeout={pageTransitionDuration}
             // onEnter={playTransition}
             // onExited={stopTransition}
             onEnter={onEnterStart}

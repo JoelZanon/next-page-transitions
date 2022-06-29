@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link'
 import styled from 'styled-components';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const Hero = styled.section`
   padding: 200px 1rem 120px;
@@ -10,11 +12,19 @@ const Hero = styled.section`
   color: white;
   background: #ccc;
 
-  img {
+  .image-wrapper {
+    position: relative;
     margin: 0 auto 50px;
     height: 300px;
     width: 300px;
-    border-radius: 100%;
+    img {
+      margin: 0 auto 50px;
+      height: 300px;
+      width: 300px;
+      border-radius: 100%;
+      object-fit: cover;
+      object-position: left;
+    }
   }
 `;
 
@@ -24,6 +34,10 @@ const BodyCopy = styled.section`
   width: 100%;
   margin: 0 auto;
 `;
+
+const myLoader = ({ src, width, quality }) => {
+  return `https://cdn.pubhubstudio.com/${src}?w=${width}&q=${quality || 75}`
+}
 
 export async function getServerSideProps({ params }) {
   const postData = { pageIndex: 3 };
@@ -36,8 +50,15 @@ export async function getServerSideProps({ params }) {
 
 const Contact = ({ postData }) => (
   <main>
+    <Head>
+      <title>Contact</title>
+      <meta property="og:title" content="Contact Page" key="title" />
+    </Head>
     <Hero>
-      <img src="https://source.unsplash.com/user/erondu/900x900" />
+      <div className="image-wrapper">
+        <Image loader={myLoader} layout="fill" src="ed2b58dccd93eb2e601405ad49b29c92.jpeg" />
+      </div>
+      {/* <img src="https://source.unsplash.com/user/erondu/900x900" /> */}
       <h1>This is the "Contact" page</h1>
       <Link href="/">Oh go back!</Link>
     </Hero>

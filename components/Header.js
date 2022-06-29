@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link'
 import styled from 'styled-components';
-
+import Head from 'next/head';
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -29,17 +29,22 @@ const A = styled.a`
 const Header = () => {
   const { route, asPath } = useRouter();
   return (
-    <StyledHeader>
-      <Link href="/">
-        <A isActive={route === '/'}>Home</A>
-      </Link>
-      <Link href="/about">
-        <A isActive={route === '/about'}>About</A>
-      </Link>
-      <Link href="/contact">
-        <A isActive={route === '/contact'}>Contact</A>
-      </Link>
-    </StyledHeader>
+    <>
+      <Head>
+        <link href="/favicon.ico" rel="shortcut icon" />
+      </Head>
+      <StyledHeader>
+        <Link href="/">
+          <A isActive={route === '/'}>Home</A>
+        </Link>
+        <Link href="/about">
+          <A isActive={route === '/about'}>About</A>
+        </Link>
+        <Link href="/contact">
+          <A isActive={route === '/contact'}>Contact</A>
+        </Link>
+      </StyledHeader>
+    </>
   );
 };
 

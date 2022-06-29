@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const Hero = styled.section`
   height: 90vh;
@@ -43,13 +45,22 @@ export async function getServerSideProps({ params }) {
   };
 }
 
+const myLoader = ({ src, width, quality }) => {
+  return `https://cdn.pubhubstudio.com/${src}?w=${width}&q=${quality || 75}`
+}
+
 const Home = ({ postData }) => (
   <main>
+    <Head>
+      <title>Home</title>
+      <meta property="og:title" content="Home Page" key="title" />
+    </Head>
     <Hero>
       <h1>
         Let's explore some page transitions!
       </h1>
-      <img src="https://source.unsplash.com/user/erondu/1600x900" alt="placeholder" />
+      <Image loader={myLoader} layout="fill" src="bbd1c98a87a9cd5fcea6296bed3548f1.jpeg" />
+      {/* <img src="https://source.unsplash.com/user/erondu/1600x900" alt="placeholder" /> */}
     </Hero>
     <BodyCopy>
       <p>
