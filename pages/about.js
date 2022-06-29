@@ -25,7 +25,7 @@ const BodyCopy = styled.section`
   margin: 0 auto;
 `;
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const postData = { pageIndex: 2 };
   return {
     props: {

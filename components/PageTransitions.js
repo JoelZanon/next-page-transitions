@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { useRouter } from 'next/router';
-
-let goLeft = false;
-let goRight = false;
+import gsap from 'gsap';
 
 const transitionZoom = keyframes`
   0% {
@@ -115,7 +113,7 @@ const SecondaryComponent = styled.div`
 `;
 
 const WrapperComponent = styled.div`
-  &.going-left {
+  /* &.going-left {
     ${MainComponent} {
       &.page-enter-active {
         animation: 500ms ${transitionInSlideFromLeft} 250ms cubic-bezier(0.37, 0, 0.63, 1) both;
@@ -134,15 +132,21 @@ const WrapperComponent = styled.div`
         animation: 500ms ${transitionOutSlideToLeft} 250ms cubic-bezier(.37, 0, .63, 1) both;
       }
     }
-  }
+  } */
 `;
+
+let currentPageNavigationIndex = null;
+let newPageNavigationIndex = null;
 
 const PageTransitions = ({ children, route, routingPageOffset }) => {
   const router = useRouter();
   const [transitioning, setTransitioning] = useState();
-  const [currentPageIndex, setCurrentPageIndex] = useState();
+  const [currentPageIndex, setCurrentPageIndex] = useState(children?.props?.postData?.pageIndex);
   const [goingLeft, setGoingLeft] = useState();
   const [goingRight, setGoingRight] = useState();
+
+  const timeline = useRef();
+  const transitionRef = useRef();
 
   const playTransition = () => {
     setTransitioning(true);
@@ -151,25 +155,35 @@ const PageTransitions = ({ children, route, routingPageOffset }) => {
     setTransitioning();
   };
 
+  if (!currentPageNavigationIndex) {
+    currentPageNavigationIndex = currentPageIndex;
+  }
+  const onExitedStart = (element) => {
+    currentPageNavigationIndex = newPageNavigationIndex;
+  }
+  const onExitStart = (element) => {
+    setTransitioning();
+    let xPos = currentPageNavigationIndex > newPageNavigationIndex ? 100 : -100;
+    gsap.timeline({})
+    .to(element, { xPercent: xPos });
+  };
+  const onEnterStart = (element) => {
+    setTransitioning(true);
+    newPageNavigationIndex = parseInt(element['id'], 10);
+    let xPos = currentPageNavigationIndex > newPageNavigationIndex ? -100 : 100;
+    gsap.timeline({})
+    .from(element, { xPercent: xPos });
+  };
+
   useEffect(() => {
     if (currentPageIndex && router?.components[route]?.props?.pageProps?.postData?.pageIndex > currentPageIndex) {
-      goLeft = false;
-      goRight = true;
       setGoingLeft(false);
       setGoingRight(true);
-      setCurrentPageIndex(router?.components[route]?.props?.pageProps?.postData?.pageIndex);
     } else if (currentPageIndex && router?.components[route]?.props?.pageProps?.postData?.pageIndex < currentPageIndex) {
-      goLeft = true;
-      goRight = false;
       setGoingLeft(true);
       setGoingRight(false);
-      setCurrentPageIndex(router?.components[route]?.props?.pageProps?.postData?.pageIndex);
-    } else {
-      goLeft = false;
-      goRight = false;
-      setCurrentPageIndex(router?.components[route]?.props?.pageProps?.postData?.pageIndex);
     }
-    console.log('goLeft: ', goLeft, 'goRight: ', goRight);
+    setCurrentPageIndex(router?.components[route]?.props?.pageProps?.postData?.pageIndex);
   }, [transitioning]);
 
   return (
@@ -179,10 +193,13 @@ const PageTransitions = ({ children, route, routingPageOffset }) => {
             key={route}
             classNames="page"
             timeout={1000}
-            onEnter={playTransition}
-            onExited={stopTransition}
+            // onEnter={playTransition}
+            onEnter={onEnterStart}
+            onExit={onExitStart}
+            onExited={onExitedStart}
+            // onExited={stopTransition}
           >
-          <MainComponent routingPageOffset={routingPageOffset}>
+          <MainComponent id={children?.props?.postData?.pageIndex} routingPageOffset={routingPageOffset}>
             <SecondaryComponent className={`page-transition-inner`}>
               {children}
             </SecondaryComponent>
