@@ -8,7 +8,7 @@ const Hero = styled.section`
   place-content: center;
   text-align: center;
   color: white;
-  background: #777;
+  background: #ccc;
 
   img {
     margin: 0 auto 50px;
@@ -26,7 +26,7 @@ const BodyCopy = styled.section`
 `;
 
 export async function getStaticProps({ params }) {
-  const postData = { pageIndex: 2 };
+  const postData = { pageIndex: 3 };
   return {
     props: {
       postData,
@@ -34,11 +34,11 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const About = ({ postData }) => (
+const Contact = ({ postData }) => (
   <main>
     <Hero>
-      <img src="https://source.unsplash.com/user/erondu/600x600" />
-      <h1>This is the "About" page</h1>
+      <img src="https://source.unsplash.com/user/erondu/900x900" />
+      <h1>This is the "Contact" page</h1>
       <Link href="/">Oh go back!</Link>
     </Hero>
     <BodyCopy>
@@ -62,4 +62,4 @@ const About = ({ postData }) => (
   </main>
 );
 
-export default About;
+export default Contact;

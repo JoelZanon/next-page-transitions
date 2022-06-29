@@ -36,6 +36,9 @@ const Header = () => {
       <Link href="/about">
         <A isActive={route === '/about'}>About</A>
       </Link>
+      <Link href="/contact">
+        <A isActive={route === '/contact'}>Contact</A>
+      </Link>
     </StyledHeader>
   );
 };

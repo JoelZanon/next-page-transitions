@@ -34,7 +34,16 @@ const BodyCopy = styled.section`
   margin: 0 auto;
 `;
 
-const Home = () => (
+export async function getStaticProps({ params }) {
+  const postData = { pageIndex: 1 };
+  return {
+    props: {
+      postData,
+    },
+  };
+}
+
+const Home = ({ postData }) => (
   <main>
     <Hero>
       <h1>
