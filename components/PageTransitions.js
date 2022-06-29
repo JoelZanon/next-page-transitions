@@ -192,12 +192,12 @@ const PageTransitions = ({ children, route, routingPageOffset }) => {
         <CSSTransition
             key={route}
             classNames="page"
-            timeout={1000}
+            timeout={500}
             // onEnter={playTransition}
+            // onExited={stopTransition}
             onEnter={onEnterStart}
             onExit={onExitStart}
             onExited={onExitedStart}
-            // onExited={stopTransition}
           >
           <MainComponent id={children?.props?.postData?.pageIndex} routingPageOffset={routingPageOffset}>
             <SecondaryComponent className={`page-transition-inner`}>
