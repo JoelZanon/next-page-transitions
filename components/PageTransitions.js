@@ -79,7 +79,7 @@ const transitionInSlideFromRight = keyframes`
 `;
 
 const MainComponent = styled.div`
-  transform-style: preserve-3d;
+  /* transform-style: preserve-3d; */
   &.page-enter-active {
     position: absolute;
     top: 0;
@@ -92,7 +92,7 @@ const MainComponent = styled.div`
     .page-transition-inner {
       height: 100vh;
       overflow: hidden;
-      // animation: 1000ms ${transitionZoom} cubic-bezier(0.45, 0, 0.55, 1) both;
+      /* animation: 1000ms ${transitionZoom} cubic-bezier(0.45, 0, 0.55, 1) both; */
       background: white;
     }
   }
