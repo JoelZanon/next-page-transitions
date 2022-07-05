@@ -79,7 +79,10 @@ const transitionInSlideFromRight = keyframes`
 `;
 
 const MainComponent = styled.div`
-  /* transform-style: preserve-3d; */
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
   &.page-enter-active {
     position: absolute;
     top: 0;
@@ -115,6 +118,10 @@ const SecondaryComponent = styled.div`
 `;
 
 const WrapperComponent = styled.div`
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
   /* &.going-left {
     ${MainComponent} {
       &.page-enter-active {
